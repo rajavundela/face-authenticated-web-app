@@ -1,0 +1,29 @@
+{% extends "company/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="content-section">
+        <form enctype='multipart/form-data' method="POST">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">LogIn</legend>
+                {{ form|crispy }}
+                <!-- Browse a pic:<input type="file" name="authpic" accept="image/*"><br>
+                The picture must show your face clearly as it is used for authentication. -->
+            </fieldset>
+            <div class="form-group">
+                <button class="btn btn-outline-info" type="submit">Login</button>
+                <!-- <script>
+                    function alertFunction(){
+                        alert("PUT YOUR FACE CLOSE TO THE CAM TO AUTHENTICATE.");
+                    }
+                </script> -->
+                Reset Password?
+            </div>
+        </form>
+        <div class="border-top pt-3">
+            <small class="text-muted">
+                Don't Have An Account? <a class="ml-2" href="{% url 'register' %}">Sign Up</a>
+            </small>
+        </div>
+    </div>
+{% endblock content %}
