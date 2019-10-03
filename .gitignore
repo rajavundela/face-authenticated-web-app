@@ -1,4 +1,6 @@
-.DS_Store
+# ignores all files having extension sqlite3
 *.sqlite3
-venv
-*.vscode
+# ignores folder named .vscode
+.vscode/
+# ignores folder named profile_pics
+profile_pics/
