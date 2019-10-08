@@ -1,6 +1,7 @@
+# https://stackoverflow.com/questions/32942529/django-not-null-constraint-failed-userprofile-user-id-in-case-of-uploading-a-fil
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .forms import UserRegisterForm
+from .forms import UserRegisterForm, ProfileRegisterForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
@@ -15,15 +16,23 @@ import time
 
 def register(request):
     if request.method == 'POST':
-        form = UserRegisterForm(request.POST)
-        if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
+        user_form = UserRegisterForm(request.POST)
+        profile_form = ProfileRegisterForm(request.POST, request.FILES)
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile = profile_form.save(commit=False)
+            # print(request.POST)
+            profile.user = User.objects.get(username=request.POST['username'])
+            profile.save()
+            username = user_form.cleaned_data.get('username')
             messages.success(request, f'Account created for {username}!')
             return redirect('login')
     else:
-        form = UserRegisterForm()
-    return render(request, 'users/register.html', {'form':form})
+        user_form = UserRegisterForm()
+        profile_form = ProfileRegisterForm()
+
+    context = {'user_form':user_form, 'profile_form':profile_form}
+    return render(request, 'users/register.html', context)
 
 @login_required
 def profile(request):
@@ -72,6 +81,7 @@ def login_view(request):
     if request.user.is_authenticated:
         return redirect('company:home')
     if request.method == 'POST':
+        print(request.POST)
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
             username = form.cleaned_data.get('username')
@@ -87,6 +97,10 @@ def login_view(request):
     else:
         form = AuthenticationForm()
     return render(request, 'users/login.html', {'form':form})
+
+# def face_login_view(request):
+#     pass
+
 
 
 

@@ -6,7 +6,8 @@
             {% csrf_token %}
             <fieldset class="form-group">
                 <legend class="border-bottom mb-4">Join Today</legend>
-                {{ form|crispy }}
+                {{ user_form|crispy }}
+                {{ profile_form|crispy }}
                 <!-- Browse a pic:<input type="file" name="authpic" accept="image/*"><br>
                 The picture must show your face clearly as it is used for authentication. -->
             </fieldset>
