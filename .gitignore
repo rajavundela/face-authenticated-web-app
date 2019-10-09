@@ -6,3 +6,10 @@
 # ignores folder named profile_pics
 profile_pics/
 practice/
+
+# Django
+*.log
+*.pot
+*.pyc
+__pycache__/
+local_settings.py

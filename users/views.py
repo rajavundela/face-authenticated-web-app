@@ -1,7 +1,7 @@
 # https://stackoverflow.com/questions/32942529/django-not-null-constraint-failed-userprofile-user-id-in-case-of-uploading-a-fil
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .forms import UserRegisterForm, ProfileRegisterForm
+from .forms import UserRegisterForm, ProfileForm, UserUpdateForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
@@ -17,7 +17,7 @@ import time
 def register(request):
     if request.method == 'POST':
         user_form = UserRegisterForm(request.POST)
-        profile_form = ProfileRegisterForm(request.POST, request.FILES)
+        profile_form = ProfileForm(request.POST, request.FILES)
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile = profile_form.save(commit=False)
@@ -29,7 +29,7 @@ def register(request):
             return redirect('login')
     else:
         user_form = UserRegisterForm()
-        profile_form = ProfileRegisterForm()
+        profile_form = ProfileForm()
 
     context = {'user_form':user_form, 'profile_form':profile_form}
     return render(request, 'users/register.html', context)
@@ -38,7 +38,27 @@ def register(request):
 def profile(request):
     return render(request, 'users/profile.html')
 
+@login_required
+def profile_update_view(request):
+    if request.method == 'POST':
+        user_form = UserUpdateForm(request.POST, instance=request.user)
+        profile_form = ProfileForm(request.POST, request.FILES, instance=request.user.profile)
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request, 'Your account has been updated!')
+            return redirect('profile')
+    else:
+        user_form = UserUpdateForm(instance=request.user)
+        profile_form = ProfileForm(instance=request.user.profile)
+    
+    print(request.user)
+    print(request)
+    context = {'user_form':user_form, 'profile_form':profile_form}
+    return render(request, 'users/profile_update.html', context)
+
 def face_auth(user):
+    ''' This function returns true if valid face found for the user '''
     path = os.path.join(settings.MEDIA_ROOT,str(user.profile.image))
     # Load a sample picture and learn how to recognize it.
     user_image = face_recognition.load_image_file(path)
@@ -100,6 +120,11 @@ def login_view(request):
 
 # def face_login_view(request):
 #     pass
+
+
+
+
+
 
 
 
