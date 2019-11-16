@@ -1,4 +1,5 @@
 {% extends "company/base.html" %}
+{% load static %}
 {% load crispy_forms_tags %}
 {% block content %}
     <div class="content-section">
@@ -10,7 +11,7 @@
                 {{ profile_form|crispy }}
                 <!-- Browse a pic:<input type="file" name="authpic" accept="image/*"><br>
                 The picture must show your face clearly as it is used for authentication. -->
-                <em style="color:rgb(255, 102, 0);font-size:15px">*The picture must have your clear face as it is used for authentication.</em><br>
+                <em style="color:#ff6600;font-size:15px">*The picture must have your clear face as it is used for authentication.</em><br>
             </fieldset>
             <div class="form-group">
                 <button class="btn btn-outline-info" type="submit">Sign Up</button>
@@ -22,4 +23,6 @@
             </small>
         </div>
     </div>
+    <video id="video" width="400" height="300"></video>
+    <script src="{% static 'users/imageUploader.js' %}"></script>
 {% endblock content %}
