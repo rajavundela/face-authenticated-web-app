@@ -1,7 +1,7 @@
 # https://stackoverflow.com/questions/32942529/django-not-null-constraint-failed-userprofile-user-id-in-case-of-uploading-a-fil
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .forms import UserRegisterForm, ProfileForm, UserUpdateForm
+from .forms import UserRegisterForm, ProfileForm, UserUpdateForm, ImageUploadForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
@@ -65,7 +65,7 @@ def profile_update_view(request):
         profile_form = ProfileForm(instance=request.user.profile)
         
     context = {'user_form':user_form, 'profile_form':profile_form}
-    return render(request, 'users/profile_update.html', context)
+    return render(request, 'users/profile-update.html', context)
 
 def face_auth(user):
     ''' This function returns true if valid face found for the user '''
@@ -127,5 +127,11 @@ def login_view(request):
         form = AuthenticationForm()
     return render(request, 'users/login.html', {'form':form})
 
-# def face_login_view(request):
-#     pass
+
+def image_upload(request):
+    if request.method == 'POST':
+        form = ImageUploadForm(request, data=request.POST)
+        print(request.POST['base64image'])
+    else:
+        form = ImageUploadForm()
+    return render(request, 'users/image-upload.html', {'form': form})

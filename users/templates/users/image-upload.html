@@ -1,0 +1,26 @@
+{% extends "company/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block headcontent %}
+<script src="{% static 'users/image-upload/capture.js' %}"></script>
+<link rel="stylesheet" href="{% static 'users/image-upload/main.css'%}" type="text/css" media="all">
+{% endblock headcontent %}
+{% block content %}
+    <div class="content-section">
+
+        <div class="camera">
+            <video id="video">Video stream not available.</video>
+            <button id="startbutton">Take photo</button> 
+        </div>
+        <canvas id="canvas">
+        </canvas>
+        <div class="output">
+        <img id="photo" alt="The screen capture will appear in this box."> 
+        </div>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form }}
+            <a href="{% url 'image_upload' %}" onclick="setValue();">Click to submit</a>
+        </form>
+    </div>
+{% endblock content %}
