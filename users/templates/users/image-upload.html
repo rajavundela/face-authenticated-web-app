@@ -7,20 +7,23 @@
 {% endblock headcontent %}
 {% block content %}
     <div class="content-section">
-
-        <div class="camera">
-            <video id="video">Video stream not available.</video>
-            <button id="startbutton">Take photo</button> 
-        </div>
         <canvas id="canvas">
         </canvas>
         <div class="output">
         <img id="photo" alt="The screen capture will appear in this box."> 
         </div>
-        <form method="POST">
-            {% csrf_token %}
-            {{ form }}
-            <a href="{% url 'image_upload' %}" onclick="setValue();">Click to submit</a>
-        </form>
+        <div class="camera">
+                <video id="video">Video stream not available.</video>
+                <button id="startbutton" onclick="">Take photo</button> 
+            </div>
+        <button id="submitImage" type="button">Submit</button>
     </div>
+    <script>
+        
+    submitImage = document.getElementById("submitImage");
+    submitImage.addEventListener("click", function(){
+        post("{% url 'image_upload' %}", {stringimage:data});
+    });
+    </script>
 {% endblock content %}
+

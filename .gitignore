@@ -14,3 +14,4 @@ practice/
 __pycache__/
 local_settings.py
 media/check.jpeg
+media/check.png

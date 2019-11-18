@@ -1,3 +1,4 @@
+var data;
 (function() {
   // The width and height of the captured photo. We will set the
   // width to the value defined here, but the height will be
@@ -69,7 +70,7 @@
     context.fillStyle = "#AAA";
     context.fillRect(0, 0, canvas.width, canvas.height);
 
-    var data = canvas.toDataURL('image/png');//data is base64 string(image is stored in the form of base64 string)
+    data = canvas.toDataURL('image/png');//data is base64 string(image is stored in the form of base64 string)
     photo.setAttribute('src', data);
   }
   
@@ -86,19 +87,52 @@
       canvas.height = height;
       context.drawImage(video, 0, 0, width, height);
     
-      var data = canvas.toDataURL('image/png');
+      data = canvas.toDataURL('image/png');
       photo.setAttribute('src', data);
+      // xhttp = new XMLHttpRequest();
+      // xhttp.open("POST", location.href);
+      // var csrfToken = xhttp.getResponseHeader('x-csrf-token');   
+      // xhttp.setRequestHeader('x-csrf-token', csrfToken);
+      // xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      // xhttp.send("stringimage="+data);
     } else {
       clearphoto();
     }
   }
 
+  submitImage = document.getElementById("submitImage");
+  // submitImage.addEventListener("click", function(){ alert("Hello World!"); });
   // Set up our event listener to run the startup process
   // once loading is complete.
   window.addEventListener('load', startup, false);
 })();
 
-function setValue(){
-  document.sampleForm.total.value = 100;
-  document.forms["sampleForm"].submit();
+
+function post(path, params, method='post') {
+
+  // The rest of this code assumes you are not using a library.
+  // It can be made less wordy if you use one.
+  const form = document.createElement('form');
+  form.method = method;
+  form.action = path;
+  // var csrftoken = Cookies.get('csrftoken');
+  // form.appendChild(csrftoken);
+  for (const key in params) {
+    if (params.hasOwnProperty(key)) {
+      const hiddenField = document.createElement('input');
+      hiddenField.type = 'hidden';
+      hiddenField.name = key;
+      hiddenField.value = params[key];
+
+      form.appendChild(hiddenField);
+    }
+  }
+
+  document.body.appendChild(form);
+  form.submit();
 }
+
+
+
+
+

@@ -21,6 +21,3 @@ class UserUpdateForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['username', 'email']
-
-class ImageUploadForm(forms.Form):
-    base64Image = forms.CharField(widget=forms.HiddenInput(attrs={'id': 'image-upload'}))

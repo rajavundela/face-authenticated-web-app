@@ -12,6 +12,8 @@ import os
 import face_recognition
 import cv2
 import time
+from django.views.decorators.csrf import csrf_exempt
+import base64
 # Create your views here.
 
 def register(request):
@@ -127,11 +129,34 @@ def login_view(request):
         form = AuthenticationForm()
     return render(request, 'users/login.html', {'form':form})
 
+def is_valid_pic(stringimage):
+    ''' 
+    This function takes base64 string image, saves it as check.png and checks if it is valid.
+    returns number of faces
+    '''
+    # stringimage contains 'data:image/png;base64,' at the front which is not needed, so removing it
+    stringimage = stringimage[22:]
 
+    imgdata = base64.b64decode(stringimage)
+    with open('./media/check.png', 'wb') as f:
+        f.write(imgdata)
+    
+    user_image = face_recognition.load_image_file('./media/check.png')
+    user_face_encoding = face_recognition.face_encodings(user_image)
+    return len(user_face_encoding)
+
+@csrf_exempt
 def image_upload(request):
     if request.method == 'POST':
-        form = ImageUploadForm(request, data=request.POST)
-        print(request.POST['base64image'])
+        faces = is_valid_pic(request.POST['stringimage']) # no of faces
+        if faces == 0:
+            messages.warning(request, 'Error: Face was not found in the image. Please upload valid Picture.')
+        elif faces > 1:
+            messages.warning(request, 'Error: Multiple faces were found in the picture')
+        else:
+            # save user image to server
+            messages.success(request, 'success: perfect PIC')
     else:
-        form = ImageUploadForm()
-    return render(request, 'users/image-upload.html', {'form': form})
+        pass
+        # form = ImageUploadForm()
+    return render(request, 'users/image-upload.html')
