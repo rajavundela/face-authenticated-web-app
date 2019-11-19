@@ -13,16 +13,15 @@
         <img id="photo" alt="The screen capture will appear in this box."> 
         </div>
         <div class="camera">
-                <video id="video">Video stream not available.</video>
-                <button id="startbutton" onclick="">Take photo</button> 
-            </div>
+            <video id="video">Video stream not available.</video>
+            <button id="startbutton" onclick="">Take photo</button> 
+        </div>
         <button id="submitImage" type="button">Submit</button>
     </div>
     <script>
-        
     submitImage = document.getElementById("submitImage");
     submitImage.addEventListener("click", function(){
-        post("{% url 'image_upload' %}", {stringimage:data});
+        post("{% url 'image_upload' %}", {stringimage:data, csrfmiddlewaretoken:'{{ csrf_token }}', username:'{{username}}'});
     });
     </script>
 {% endblock content %}

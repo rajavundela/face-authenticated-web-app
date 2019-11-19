@@ -89,12 +89,6 @@ var data;
     
       data = canvas.toDataURL('image/png');
       photo.setAttribute('src', data);
-      // xhttp = new XMLHttpRequest();
-      // xhttp.open("POST", location.href);
-      // var csrfToken = xhttp.getResponseHeader('x-csrf-token');   
-      // xhttp.setRequestHeader('x-csrf-token', csrfToken);
-      // xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-      // xhttp.send("stringimage="+data);
     } else {
       clearphoto();
     }
@@ -115,8 +109,6 @@ function post(path, params, method='post') {
   const form = document.createElement('form');
   form.method = method;
   form.action = path;
-  // var csrftoken = Cookies.get('csrftoken');
-  // form.appendChild(csrftoken);
   for (const key in params) {
     if (params.hasOwnProperty(key)) {
       const hiddenField = document.createElement('input');
