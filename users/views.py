@@ -14,7 +14,7 @@ import cv2
 import time
 import base64
 # Create your views here.
-''' You can get current loggend user object by name 'user'  '''
+''' You can get current logged in user object by name 'user'  '''
 
 # def register(request):
 #     if request.method == 'POST':
@@ -172,8 +172,12 @@ def image_upload(request):
         elif faces > 1:
             messages.warning(request, 'Error: Multiple faces were found in the picture')
         else:
-            # save user image to server
-            user = User.objects.get(username=request.POST['username'])
+            # for now, user is allowed to submit data if he is coming from login/register page only.
+            try:
+                user = User.objects.get(username=request.POST['username'])
+            except:
+                messages.success(request, 'You cannot submit data. Invalid session.')
+                return redirect('login')
             user.profile.auth_image = stringimage
             user.save()
             messages.success(request, 'success: Your registration process is completed!')
