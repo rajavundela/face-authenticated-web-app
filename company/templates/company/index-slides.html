@@ -35,6 +35,19 @@
     <link rel="stylesheet" href="{% static 'company/css/base.css' %}">
     <link rel="stylesheet" href="{% static 'company/css/vendor.css' %}">
     <link rel="stylesheet" href="{% static 'company/css/main.css' %}">
+    <style>
+        .headerstyling{
+            float: left;
+            color:#f1bb0b;
+            font-weight:bold;
+            text-align: center;
+            padding: 12px;
+            text-decoration: none;
+            font-size: 18px; 
+            line-height: 25px;
+            border-radius: 4px;
+        }
+    </style>
 
     <!-- script
     ================================================== -->
@@ -72,18 +85,18 @@
             </a>
         </div>
 
-        <div class="header-email">
+        <!-- <div class="header-email">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M0 12l11 3.1 7-8.1-8.156 5.672-4.312-1.202 15.362-7.68-3.974 14.57-3.75-3.339-2.17 2.925v-.769l-2-.56v7.383l4.473-6.031 4.527 4.031 6-22z"/></svg>
             <a href="mailto:#0">hello@imminent.com</a>
-        </div>
+        </div> -->
 
-        <div>
+        <div style="padding-left: 5em;">
             {% if user.is_authenticated %}
-            <a style="float:inline-start;color:whitesmoke;" href="{% url 'profile' %}">My profile</a>
-            <a style="float: right;" class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>  
+            <a class="headerstyling" href="{% url 'profile' %}">My profile</a>
+            <a class="headerstyling" href="{% url 'logout' %}">Logout</a>  
             {% else %}
-            <a style="float: right;" class="nav-item nav-link" href="{% url 'login' %}">Login</a>
-            <a style="float: right;" class="nav-item nav-link" href="{% url 'register' %}">Register</a>
+            <a class="headerstyling" href="{% url 'login' %}">Login</a>
+            <a class="headerstyling" href="{% url 'register' %}">Register</a>
             {% endif %}
         </div>
     </header> <!-- end s-header -->
