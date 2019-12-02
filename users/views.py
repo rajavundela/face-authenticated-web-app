@@ -144,6 +144,7 @@ def login_view(request):
                 else:
                     messages.warning(request, f'Valid face not found for user {username}!')
     else:
+        messages.warning(request, 'PUT YOUR FACE CLOSE TO THE CAM TO AUTHENTICATE AFTER PRESSING ENTER.')
         form = AuthenticationForm()
     return render(request, 'users/login.html', {'form':form})
 
@@ -163,6 +164,7 @@ def is_valid_pic(stringimage):
 
 def image_upload(request):
     if request.method == 'POST':
+        username = request.POST['username']
         stringimage = request.POST['stringimage']
         # stringimage contains 'data:image/png;base64,' at the front which is not needed, so removing it
         stringimage = stringimage[22:]
@@ -173,15 +175,14 @@ def image_upload(request):
             messages.warning(request, 'Error: Multiple faces were found in the picture')
         else:
             # for now, user is allowed to submit data if he is coming from login/register page only.
-            try:
-                user = User.objects.get(username=request.POST['username'])
-            except:
-                messages.success(request, 'You cannot submit data. Invalid session.')
-                return redirect('login')
-            user.profile.auth_image = stringimage
-            user.save()
-            messages.success(request, 'success: Your registration process is completed!')
+            if username == '':
+                messages.warning(request, 'You cannot submit data. Invalid session.')
+            else:
+                user = User.objects.get(username=username)
+                user.profile.auth_image = stringimage
+                user.save()
+                messages.success(request, 'success: Your registration process is completed! Now you can login!')
             return redirect('login')
     else:
-        pass
-    return render(request, 'users/image-upload.html')
+        username = ''
+    return render(request, 'users/image-upload.html',{'username':username})
